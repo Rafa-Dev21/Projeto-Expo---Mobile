@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
@@ -7,7 +8,15 @@ import {
   SafeAreaView,
 } from 'react-native';
 
+import Login from './src/pages/login';
+
 export default function App() {
+  const [screen, setScreen] = useState('home');
+
+  if (screen === 'login') {
+    return <Login onBack={() => setScreen('home')} />;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -16,48 +25,35 @@ export default function App() {
       <View style={styles.glowBottom} />
 
       <View style={styles.content}>
-        <Text style={styles.badge}>⚡ EXPO APP</Text>
-
-        <Text style={styles.title}>
-          RAFINHA
-          {'\n'}
-          <Text style={styles.titleAccent}>BRABO!</Text>
-        </Text>
+        <Text style={styles.logo}>ProjetoX</Text>
 
         <Text style={styles.subtitle}>
-          Não é só um app.{'\n'}
-          É presença. 😎
+          Bem-vindo ao seu novo projeto.
         </Text>
 
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>R</Text>
-            </View>
+        <View style={styles.buttons}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.loginButton,
+              pressed && styles.pressed,
+            ]}
+            onPress={() => setScreen('login')}
+          >
+            <Text style={styles.loginText}>ENTRAR</Text>
+          </Pressable>
 
-            <View>
-              <Text style={styles.cardName}>Rafinha</Text>
-              <Text style={styles.cardStatus}>● Online agora</Text>
-            </View>
-          </View>
-
-          <View style={styles.divider} />
-
-          <Text style={styles.cardText}>
-            Desenvolvendo coisas insanas 🚀
-          </Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.registerButton,
+              pressed && styles.pressed,
+            ]}
+            onPress={() => {
+              console.log('Abrir cadastro');
+            }}
+          >
+            <Text style={styles.registerText}>CADASTRAR-SE</Text>
+          </Pressable>
         </View>
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.button,
-            pressed && styles.buttonPressed,
-          ]}
-        >
-          <Text style={styles.buttonText}>BORA COMEÇAR 🚀</Text>
-        </Pressable>
-
-        <Text style={styles.footer}>MADE WITH 🔥 + EXPO</Text>
       </View>
     </SafeAreaView>
   );
@@ -73,127 +69,59 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 30,
   },
 
   glowTop: {
     position: 'absolute',
-    width: 250,
-    height: 250,
-    borderRadius: 125,
+    width: 280,
+    height: 280,
+    borderRadius: 140,
     backgroundColor: '#7C3AED',
     opacity: 0.15,
-    top: -100,
-    right: -80,
+    top: -120,
+    right: -100,
   },
 
   glowBottom: {
     position: 'absolute',
-    width: 220,
-    height: 220,
-    borderRadius: 110,
+    width: 240,
+    height: 240,
+    borderRadius: 120,
     backgroundColor: '#06B6D4',
-    opacity: 0.1,
+    opacity: 0.08,
     bottom: -100,
-    left: -80,
+    left: -100,
   },
 
-  badge: {
-    color: '#A78BFA',
-    fontSize: 12,
-    fontWeight: '800',
-    letterSpacing: 2,
-    backgroundColor: '#171320',
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 22,
-  },
-
-  title: {
+  logo: {
     color: '#FFFFFF',
-    fontSize: 48,
-    lineHeight: 50,
+    fontSize: 52,
     fontWeight: '900',
-    textAlign: 'center',
     letterSpacing: -2,
-  },
-
-  titleAccent: {
-    color: '#A855F7',
+    marginBottom: 12,
   },
 
   subtitle: {
-    color: '#8E8E9A',
-    fontSize: 16,
-    lineHeight: 24,
+    color: '#888894',
+    fontSize: 15,
     textAlign: 'center',
-    marginTop: 14,
-    marginBottom: 32,
+    marginBottom: 45,
   },
 
-  card: {
+  buttons: {
     width: '100%',
-    backgroundColor: '#111118',
-    borderWidth: 1,
-    borderColor: '#242432',
-    borderRadius: 24,
-    padding: 20,
-    marginBottom: 20,
+    gap: 14,
   },
 
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: '#7C3AED',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-
-  avatarText: {
-    color: '#FFFFFF',
-    fontSize: 22,
-    fontWeight: '900',
-  },
-
-  cardName: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '800',
-  },
-
-  cardStatus: {
-    color: '#22C55E',
-    fontSize: 12,
-    marginTop: 4,
-    fontWeight: '600',
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: '#242432',
-    marginVertical: 18,
-  },
-
-  cardText: {
-    color: '#B5B5C2',
-    fontSize: 14,
-  },
-
-  button: {
+  loginButton: {
     width: '100%',
+    height: 58,
     backgroundColor: '#7C3AED',
-    paddingVertical: 17,
     borderRadius: 16,
     alignItems: 'center',
+    justifyContent: 'center',
+
     shadowColor: '#7C3AED',
     shadowOffset: {
       width: 0,
@@ -204,23 +132,33 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  buttonPressed: {
-    transform: [{ scale: 0.97 }],
-    opacity: 0.85,
-  },
-
-  buttonText: {
+  loginText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '900',
     letterSpacing: 1,
   },
 
-  footer: {
-    color: '#444450',
-    fontSize: 10,
-    fontWeight: '800',
-    letterSpacing: 2,
-    marginTop: 28,
+  registerButton: {
+    width: '100%',
+    height: 58,
+    backgroundColor: '#111118',
+    borderWidth: 1,
+    borderColor: '#7C3AED',
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  registerText: {
+    color: '#A78BFA',
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+
+  pressed: {
+    transform: [{ scale: 0.97 }],
+    opacity: 0.8,
   },
 });
