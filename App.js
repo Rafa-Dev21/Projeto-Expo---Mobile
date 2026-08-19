@@ -9,13 +9,39 @@ import {
 } from 'react-native';
 
 import Login from './src/pages/login';
+import CriarConta from './src/pages/criar-conta';
+import ResetarSenha from './src/pages/resetar-senha';
 
 export default function App() {
   const [screen, setScreen] = useState('home');
 
   if (screen === 'login') {
-    return <Login onBack={() => setScreen('home')} />;
+    return (
+      <Login
+        onBack={() => setScreen('home')}
+        onForgotPassword={() => setScreen('resetarSenha')}
+      />
+    );
   }
+
+  if (screen === 'criarConta') {
+    return (
+      <CriarConta
+        onBack={() => setScreen('home')}
+        onLogin={() => setScreen('login')}
+      />
+    );
+  }
+
+  if (screen === 'resetarSenha') {
+    return (
+      <ResetarSenha
+        onBack={() => setScreen('login')}
+      />
+    );
+  }
+
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,12 +73,11 @@ export default function App() {
               styles.registerButton,
               pressed && styles.pressed,
             ]}
-            onPress={() => {
-              console.log('Abrir cadastro');
-            }}
+            onPress={() => setScreen('criarConta')}
           >
             <Text style={styles.registerText}>CADASTRAR-SE</Text>
           </Pressable>
+          
         </View>
       </View>
     </SafeAreaView>
@@ -155,6 +180,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '900',
     letterSpacing: 1,
+  },
+
+  registerText2: {
+    color: '#A78BFA',
+    fontSize: 14,
+    fontWeight: '900',
+    letterSpacing: 1,
+    marginLeft: 94,
   },
 
   pressed: {

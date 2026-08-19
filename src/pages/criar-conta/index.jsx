@@ -3,33 +3,40 @@ import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
-  SafeAreaView,
+  TextInput,
   Pressable,
+  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
 } from 'react-native';
 
-export default function Login({ onBack, onForgotPassword }) {
+export default function Register({ onBack, onLogin }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  function handleLogin() {
-    if (!email || !senha) {
+  function handleRegister() {
+    if (!name || !email || !password || !confirmPassword) {
       console.log('Preencha todos os campos');
       return;
     }
 
-    console.log('Login realizado!');
+    if (password !== confirmPassword) {
+      console.log('As senhas não coincidem');
+      return;
+    }
+
+    console.log('Conta criada!');
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
 
-      {/* Glows */}
+      {/* Glows do fundo */}
       <View style={styles.glowTop} />
       <View style={styles.glowBottom} />
 
@@ -42,32 +49,45 @@ export default function Login({ onBack, onForgotPassword }) {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-
           {/* Voltar */}
           <Pressable
             style={styles.backButton}
             onPress={onBack}
           >
-            <Text style={styles.backText}>
-              ‹ Voltar
-            </Text>
+            <Text style={styles.backText}>‹ Voltar</Text>
           </Pressable>
 
           {/* Título */}
           <View style={styles.header}>
             <Text style={styles.logo}>
-              Entrar
+              Criar conta
             </Text>
 
             <Text style={styles.subtitle}>
-              Entre na sua conta para continuar.
+              Crie sua conta para começar.
             </Text>
           </View>
 
           {/* Formulário */}
           <View style={styles.form}>
 
-            {/* E-mail */}
+            {/* Nome */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>
+                NOME
+              </Text>
+
+              <TextInput
+                style={styles.input}
+                placeholder="Seu nome"
+                placeholderTextColor="#555563"
+                value={name}
+                onChangeText={setName}
+                autoCapitalize="words"
+              />
+            </View>
+
+            {/* Email */}
             <View style={styles.inputContainer}>
               <Text style={styles.label}>
                 E-MAIL
@@ -75,10 +95,10 @@ export default function Login({ onBack, onForgotPassword }) {
 
               <TextInput
                 style={styles.input}
-                onChangeText={setEmail}
-                value={email}
                 placeholder="seu@email.com"
                 placeholderTextColor="#555563"
+                value={email}
+                onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -93,42 +113,57 @@ export default function Login({ onBack, onForgotPassword }) {
 
               <TextInput
                 style={styles.input}
-                onChangeText={setSenha}
-                value={senha}
-                placeholder="Digite sua senha"
+                placeholder="Crie uma senha"
                 placeholderTextColor="#555563"
+                value={password}
+                onChangeText={setPassword}
                 secureTextEntry
               />
             </View>
 
-            {/* Esqueci minha senha */}
-            <Pressable
-              style={({ pressed }) => [
-              styles.forgotButton,
-              pressed && styles.pressed,
-              ]}
-            onPress={onForgotPassword}
-              >
-          <Text style={styles.forgotText}>
-            Esqueci minha senha
-          </Text>
-        </Pressable>
+            {/* Confirmar senha */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>
+                CONFIRMAR SENHA
+              </Text>
 
-            {/* Entrar */}
+              <TextInput
+                style={styles.input}
+                placeholder="Digite a senha novamente"
+                placeholderTextColor="#555563"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+              />
+            </View>
+
+            {/* Botão */}
             <Pressable
               style={({ pressed }) => [
-                styles.loginButton,
+                styles.registerButton,
                 pressed && styles.pressed,
               ]}
-              onPress={handleLogin}
+              onPress={handleRegister}
             >
-              <Text style={styles.loginButtonText}>
-                ENTRAR
+              <Text style={styles.registerText}>
+                CRIAR CONTA
               </Text>
             </Pressable>
 
-          </View>
+            {/* Login */}
+            <View style={styles.loginContainer}>
+              <Text style={styles.loginText}>
+                Já possui uma conta?
+              </Text>
 
+              <Pressable onPress={onLogin}>
+                <Text style={styles.loginLink}>
+                    Entrar
+                </Text>
+              </Pressable>
+            </View>
+
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -150,7 +185,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     paddingTop: 20,
     paddingBottom: 40,
-    justifyContent: 'center',
   },
 
   glowTop: {
@@ -178,16 +212,13 @@ const styles = StyleSheet.create({
   backButton: {
     alignSelf: 'flex-start',
     paddingVertical: 8,
-    marginBottom: 35,
+    marginBottom: 28,
   },
 
   backText: {
     color: '#A78BFA',
     fontSize: 16,
     fontWeight: '700',
-    position: 'absolute',
-    top: -180,
-    right: -40,
   },
 
   header: {
@@ -196,7 +227,7 @@ const styles = StyleSheet.create({
 
   logo: {
     color: '#FFFFFF',
-    fontSize: 42,
+    fontSize: 40,
     fontWeight: '900',
     letterSpacing: -1.5,
     marginBottom: 8,
@@ -236,26 +267,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  forgotButton: {
-    alignSelf: 'flex-end',
-    marginTop: -5,
-  },
-
-  forgotText: {
-    color: '#A78BFA',
-    fontSize: 13,
-    fontWeight: '700',
-    marginRight: 114,
-  },
-
-  loginButton: {
+  registerButton: {
     width: '100%',
     height: 58,
     backgroundColor: '#7C3AED',
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 5,
+    marginTop: 8,
 
     shadowColor: '#7C3AED',
     shadowOffset: {
@@ -267,11 +286,30 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  loginButtonText: {
+  registerText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '900',
     letterSpacing: 1,
+  },
+
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 5,
+  },
+
+  loginText: {
+    color: '#666672',
+    fontSize: 14,
+  },
+
+  loginLink: {
+    color: '#A78BFA',
+    fontSize: 14,
+    fontWeight: '800',
   },
 
   pressed: {

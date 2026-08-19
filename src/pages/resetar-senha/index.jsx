@@ -12,24 +12,22 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default function Login({ onBack, onForgotPassword }) {
+export default function ResetarSenha({ onBack }) {
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
 
-  function handleLogin() {
-    if (!email || !senha) {
-      console.log('Preencha todos os campos');
+  function handleReset() {
+    if (!email) {
+      console.log('Digite seu e-mail');
       return;
     }
 
-    console.log('Login realizado!');
+    console.log('Link de recuperação enviado!');
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
 
-      {/* Glows */}
       <View style={styles.glowTop} />
       <View style={styles.glowBottom} />
 
@@ -56,18 +54,18 @@ export default function Login({ onBack, onForgotPassword }) {
           {/* Título */}
           <View style={styles.header}>
             <Text style={styles.logo}>
-              Entrar
+              Esqueci a senha
             </Text>
 
             <Text style={styles.subtitle}>
-              Entre na sua conta para continuar.
+              Digite seu e-mail e enviaremos um link
+              para você criar uma nova senha.
             </Text>
           </View>
 
           {/* Formulário */}
           <View style={styles.form}>
 
-            {/* E-mail */}
             <View style={styles.inputContainer}>
               <Text style={styles.label}>
                 E-MAIL
@@ -75,8 +73,8 @@ export default function Login({ onBack, onForgotPassword }) {
 
               <TextInput
                 style={styles.input}
-                onChangeText={setEmail}
                 value={email}
+                onChangeText={setEmail}
                 placeholder="seu@email.com"
                 placeholderTextColor="#555563"
                 keyboardType="email-address"
@@ -85,45 +83,16 @@ export default function Login({ onBack, onForgotPassword }) {
               />
             </View>
 
-            {/* Senha */}
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                SENHA
-              </Text>
-
-              <TextInput
-                style={styles.input}
-                onChangeText={setSenha}
-                value={senha}
-                placeholder="Digite sua senha"
-                placeholderTextColor="#555563"
-                secureTextEntry
-              />
-            </View>
-
-            {/* Esqueci minha senha */}
+            {/* Botão */}
             <Pressable
               style={({ pressed }) => [
-              styles.forgotButton,
-              pressed && styles.pressed,
-              ]}
-            onPress={onForgotPassword}
-              >
-          <Text style={styles.forgotText}>
-            Esqueci minha senha
-          </Text>
-        </Pressable>
-
-            {/* Entrar */}
-            <Pressable
-              style={({ pressed }) => [
-                styles.loginButton,
+                styles.resetButton,
                 pressed && styles.pressed,
               ]}
-              onPress={handleLogin}
+              onPress={handleReset}
             >
-              <Text style={styles.loginButtonText}>
-                ENTRAR
+              <Text style={styles.resetText}>
+                ENVIAR LINK
               </Text>
             </Pressable>
 
@@ -186,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     position: 'absolute',
-    top: -180,
+    top: -230,
     right: -40,
   },
 
@@ -196,15 +165,16 @@ const styles = StyleSheet.create({
 
   logo: {
     color: '#FFFFFF',
-    fontSize: 42,
+    fontSize: 38,
     fontWeight: '900',
     letterSpacing: -1.5,
-    marginBottom: 8,
+    marginBottom: 10,
   },
 
   subtitle: {
     color: '#888894',
     fontSize: 15,
+    lineHeight: 22,
   },
 
   form: {
@@ -236,19 +206,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 
-  forgotButton: {
-    alignSelf: 'flex-end',
-    marginTop: -5,
-  },
-
-  forgotText: {
-    color: '#A78BFA',
-    fontSize: 13,
-    fontWeight: '700',
-    marginRight: 114,
-  },
-
-  loginButton: {
+  resetButton: {
     width: '100%',
     height: 58,
     backgroundColor: '#7C3AED',
@@ -267,7 +225,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
 
-  loginButtonText: {
+  resetText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '900',
